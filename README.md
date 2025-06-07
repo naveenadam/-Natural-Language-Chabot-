@@ -30,7 +30,7 @@ This project follows a modular structure:
 
 1. Clone this repository:
    ```
-   git clone https://github.com/yourusername/excel-assistant.git
+   git clone [https://github.com/yourusername/excel-assistant](https://github.com/naveenadam/-Natural-Language-Chabot).git
    cd excel-assistant
    ```
 

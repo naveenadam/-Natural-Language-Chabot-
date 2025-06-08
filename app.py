@@ -44,7 +44,6 @@ def clean_response(response):
 def handle_question(question):
     if question:
         with st.spinner("Generating response..."):
-            # Check if this is a chart request
             is_chart_request = any(chart_type in question.lower() for chart_type in [
                 "chart", "plot", "graph", "visualize", "visualization", "histogram", "bar", "pie", "scatter", "line"
             ])
@@ -64,7 +63,6 @@ def handle_question(question):
             
             # For chart requests, keep the response extra minimal if a chart was generated
             if is_chart_request and chart_fig:
-                # Extract only the essential information about the chart
                 chart_info = re.search(r'(bar chart|histogram|line chart|scatter plot|pie chart|box plot).*?(of|between|showing|with).*?[.!]', cleaned_response, re.IGNORECASE)
                 if chart_info:
                     cleaned_response = chart_info.group(0)
@@ -114,7 +112,6 @@ def main():
     
     # Main content area
     if st.session_state.df is not None:
-        # Display dataframe preview
         st.subheader("Data Preview")
         st.dataframe(st.session_state.df.head(10))
         
@@ -126,24 +123,16 @@ def main():
             for idx, (question, answer) in enumerate(st.session_state.chat_history):
                 st.markdown(f"**You:** {question}")
                 st.markdown(f"**Assistant:** {answer}")
-                
-                # If a chart was generated for this response, display it
                 if hasattr(st.session_state, f"chart_for_{idx}"):
                     chart_fig = getattr(st.session_state, f"chart_for_{idx}")
                     if chart_fig:
                         st.pyplot(chart_fig)
-                
                 st.markdown("---")
-            
-            # Show follow-up prompt if awaiting follow-up
             if st.session_state.awaiting_followup and st.session_state.chat_history:
                 st.markdown("**Assistant:** Would you like to know anything else about your data?")
-        
-        # Question input using a form to handle submission properly
         with st.form(key="question_form", clear_on_submit=True):
             user_question = st.text_input("Ask a question about your data:")
-            submit_button = st.form_submit_button("Ask")
-            
+            submit_button = st.form_submit_button("Ask") 
             if submit_button and user_question:
                 handle_question(user_question)
                 st.experimental_rerun()
